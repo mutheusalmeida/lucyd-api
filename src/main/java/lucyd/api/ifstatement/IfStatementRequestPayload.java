@@ -1,9 +1,9 @@
-package lucyd.api.policy;
+package lucyd.api.ifstatement;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record IfStatementRegisterPayload(
+public record IfStatementRequestPayload(
 		
 		@NotBlank
 		String variable,
@@ -18,13 +18,8 @@ public record IfStatementRegisterPayload(
 		Boolean elseBlock,
 		
 		@NotNull
-		Boolean then,
+		Boolean thenBlock
 		
-		@NotNull
-		Boolean last,
-		
-		@NotBlank
-		Policy policy
 		) {
 
 }
