@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lucyd.api.ifstatement.IfStatement;
-import lucyd.api.ifstatement.IfStatementRequestPayload;
+import lucyd.api.ifstatement.IfStatementPostRequestPayload;
 import lucyd.api.policy.Policy;
-import lucyd.api.policy.PolicyDecisionResponsePayload;
-import lucyd.api.policy.PolicyListResponsePayload;
+import lucyd.api.policy.PolicyDecisionPostResponsePayload;
+import lucyd.api.policy.PolicyListGetResponsePayload;
 import lucyd.api.policy.PolicyRepository;
 
 @RestController
@@ -35,20 +35,20 @@ public class PolicyController {
 	}
 	
 	@GetMapping
-	public Page<PolicyListResponsePayload> getPolicies(@PageableDefault(size = 10) Pageable pagination) {
-		return policyRepository.findAll(pagination).map(PolicyListResponsePayload::new);
+	public Page<PolicyListGetResponsePayload> getPolicies(@PageableDefault(size = 10) Pageable pagination) {
+		return policyRepository.findAll(pagination).map(PolicyListGetResponsePayload::new);
 	}
 	
 	@PostMapping("/{id}/if_statements")
 	@Transactional
-	public void addIfStatement(@PathVariable Long id, @RequestBody @Valid IfStatementRequestPayload req) {
+	public void addIfStatement(@PathVariable Long id, @RequestBody @Valid IfStatementPostRequestPayload req) {
 		var policy = policyRepository.getReferenceById(id);
 		policy.addIfStatement(new IfStatement(req));
 	}
 	
 	@PostMapping("/{id}/decision")
 	@Transactional
-	public PolicyDecisionResponsePayload executeDecision(@PathVariable Long id, @RequestBody String req) {
+	public PolicyDecisionPostResponsePayload executeDecision(@PathVariable Long id, @RequestBody String req) {
 		var policy = policyRepository.getReferenceById(id);
 		return policy.executeDecision(req);
 	}

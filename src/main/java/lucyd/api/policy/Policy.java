@@ -43,9 +43,9 @@ public class Policy {
 		this.ifStatements.add(ifStatement);
 	}
 
-	public PolicyDecisionResponsePayload executeDecision(String req) {
+	public PolicyDecisionPostResponsePayload executeDecision(String req) {
 		JSONObject jsonObject = new JSONObject(req);
-		PolicyDecisionResponsePayload decision = null;
+		PolicyDecisionPostResponsePayload decision = null;
 		
 		for (IfStatement ifStatement : ifStatements) {
 			Long value = Long.parseLong(ifStatement.getValue());
@@ -76,13 +76,13 @@ public class Policy {
 			}
 			
 			if (expression) {
-				decision = new PolicyDecisionResponsePayload(thenBlock);
+				decision = new PolicyDecisionPostResponsePayload(thenBlock);
 				
 				if (!thenBlock) {
 					break;
 				}
 			} else {				
-				decision = new PolicyDecisionResponsePayload(elseBlock);
+				decision = new PolicyDecisionPostResponsePayload(elseBlock);
 				
 				if (!elseBlock) {
 					break;

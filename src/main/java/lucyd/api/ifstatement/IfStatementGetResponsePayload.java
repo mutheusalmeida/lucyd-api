@@ -1,6 +1,6 @@
 package lucyd.api.ifstatement;
 
-public record IfStatementResponsePayload(
+public record IfStatementGetResponsePayload(
 		
 		Long id,
 		
@@ -16,7 +16,7 @@ public record IfStatementResponsePayload(
 		
 		) {
 
-	public IfStatementResponsePayload(IfStatement ifStatement) {
+	public IfStatementGetResponsePayload(IfStatement ifStatement) {
 		this(
 				ifStatement.getId(), 
 				ifStatement.getVariable(), 
