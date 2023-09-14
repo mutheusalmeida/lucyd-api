@@ -39,7 +39,7 @@ public class PolicyController {
 		return policyRepository.findAll(pagination).map(PolicyListResponsePayload::new);
 	}
 	
-	@PostMapping("/{id}/if_statement")
+	@PostMapping("/{id}/if_statements")
 	@Transactional
 	public void addIfStatement(@PathVariable Long id, @RequestBody @Valid PolicyItemRequestPayload req) {
 		var policy = policyRepository.getReferenceById(id);

@@ -3,6 +3,8 @@ package lucyd.api.policy;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,11 +42,53 @@ public class Policy {
 		this.ifStatements.add(ifStatement);
 	}
 
-	public PolicyDecisionResponsePayload executeDecision(@Valid String req) {
-		Boolean decision = false;
+	public PolicyDecisionResponsePayload executeDecision(String req) {
+		JSONObject jsonObject = new JSONObject(req);
+		PolicyDecisionResponsePayload decision = null;
+		
+		for (IfStatement ifStatement : ifStatements) {
+			Long value = Long.parseLong(ifStatement.getValue());
+			Long variable = jsonObject.getLong(ifStatement.getVariable());
+			Boolean elseBlock = ifStatement.getElseBlock();
+			Boolean thenBlock = ifStatement.getThenBlock();
+			String comparisonOperator = ifStatement.getComparisonOperator();
+			
+			Boolean expression = null;
+			
+			switch (comparisonOperator) {
+				case ">":
+					expression = variable > value;
+					break;
+				case "=":
+					expression = variable.equals(value);
+					break;
+				case "<":
+					expression = variable < value;
+					break;
+				case "<=":
+					expression = variable <= value;
+					break;
+				case ">=":
+					expression = variable >= value;
+					break;
+			}
+			
+			if (expression) {
+				decision = new PolicyDecisionResponsePayload(thenBlock);
+				
+				if (!thenBlock) {
+					break;
+				}
+			} else {				
+				decision = new PolicyDecisionResponsePayload(elseBlock);
+				
+				if (!elseBlock) {
+					break;
+				}
+			}
+			
+		}
 
-		System.out.println(req);
-
-		return new PolicyDecisionResponsePayload(decision);
+		return decision;
 	}
 }
