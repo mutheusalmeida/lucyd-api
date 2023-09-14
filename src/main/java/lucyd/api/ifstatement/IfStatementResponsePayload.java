@@ -8,7 +8,7 @@ public record IfStatementResponsePayload(
 		
 		String value,
 		
-		String comparisonOperator,
+		ComparisonOperator comparisonOperator,
 	
 		Boolean elseBlock,
 	

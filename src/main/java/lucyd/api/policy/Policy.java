@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lucyd.api.ifstatement.ComparisonOperator;
 import lucyd.api.ifstatement.IfStatement;
 
 @Table(name = "policies")
@@ -49,26 +50,27 @@ public class Policy {
 		for (IfStatement ifStatement : ifStatements) {
 			Long value = Long.parseLong(ifStatement.getValue());
 			Long variable = jsonObject.getLong(ifStatement.getVariable());
+			
 			Boolean elseBlock = ifStatement.getElseBlock();
 			Boolean thenBlock = ifStatement.getThenBlock();
-			String comparisonOperator = ifStatement.getComparisonOperator();
+			ComparisonOperator comparisonOperator = ifStatement.getComparisonOperator();
 			
 			Boolean expression = null;
 			
 			switch (comparisonOperator) {
-				case ">":
-					expression = variable > value;
-					break;
-				case "=":
+				case EQ:
 					expression = variable.equals(value);
 					break;
-				case "<":
+				case LT:
 					expression = variable < value;
 					break;
-				case "<=":
+				case LTE:
 					expression = variable <= value;
 					break;
-				case ">=":
+				case GT:
+					expression = variable > value;
+					break;
+				case GTE:
 					expression = variable >= value;
 					break;
 			}

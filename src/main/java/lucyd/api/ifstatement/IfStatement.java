@@ -2,6 +2,8 @@ package lucyd.api.ifstatement;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,8 +30,9 @@ public class IfStatement {
 	private String variable;
 	private String value;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name =  "comparison_operator")
-	private String comparisonOperator;
+	private ComparisonOperator comparisonOperator;
 	
 	@Column(name =  "else_block")
 	private Boolean elseBlock;

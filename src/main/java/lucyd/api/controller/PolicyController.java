@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lucyd.api.ifstatement.IfStatement;
+import lucyd.api.ifstatement.IfStatementRequestPayload;
 import lucyd.api.policy.Policy;
 import lucyd.api.policy.PolicyDecisionResponsePayload;
 import lucyd.api.policy.PolicyListResponsePayload;
 import lucyd.api.policy.PolicyRepository;
-import lucyd.api.policy.PolicyItemRequestPayload;
 
 @RestController
 @RequestMapping("policies")
@@ -41,9 +41,9 @@ public class PolicyController {
 	
 	@PostMapping("/{id}/if_statements")
 	@Transactional
-	public void addIfStatement(@PathVariable Long id, @RequestBody @Valid PolicyItemRequestPayload req) {
+	public void addIfStatement(@PathVariable Long id, @RequestBody @Valid IfStatementRequestPayload req) {
 		var policy = policyRepository.getReferenceById(id);
-		policy.addIfStatement(new IfStatement(req.ifStatement()));
+		policy.addIfStatement(new IfStatement(req));
 	}
 	
 	@PostMapping("/{id}/decision")

@@ -11,8 +11,8 @@ public record IfStatementRequestPayload(
 		@NotBlank
 		String value,
 		
-		@NotBlank
-		String comparisonOperator,
+		@NotNull
+		ComparisonOperator comparisonOperator,
 		
 		@NotNull
 		Boolean elseBlock,
