@@ -1,6 +1,7 @@
 package lucyd.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lucyd.api.ifstatement.IfStatement;
-import lucyd.api.ifstatement.IfStatementGetRequestPayload;
+import lucyd.api.ifstatement.IfStatementUpdateRequestPayload;
 import lucyd.api.ifstatement.IfStatementRepository;
+import lucyd.api.ifstatement.IfStatementResponsePayload;
 
 @RestController
 @RequestMapping("if_statements")
@@ -22,14 +24,18 @@ public class IfStatementController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public void delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		ifStatementRepository.deleteById(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public void update(@PathVariable Long id, @RequestBody IfStatementGetRequestPayload req) {
+	public ResponseEntity<IfStatementResponsePayload> update(@PathVariable Long id, @RequestBody IfStatementUpdateRequestPayload req) {
 		IfStatement ifStatement = ifStatementRepository.getReferenceById(id);
 		ifStatement.update(req);
+		
+		return ResponseEntity.ok(new IfStatementResponsePayload(ifStatement));
 	}
 }

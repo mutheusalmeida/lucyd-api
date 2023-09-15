@@ -1,6 +1,6 @@
 package lucyd.api.ifstatement;
 
-public record IfStatementGetResponsePayload(
+public record IfStatementResponsePayload(
 		Long id,
 		String variable,
 		String value,
@@ -9,7 +9,7 @@ public record IfStatementGetResponsePayload(
 		Boolean thenBlock
 		) {
 
-	public IfStatementGetResponsePayload(IfStatement ifStatement) {
+	public IfStatementResponsePayload(IfStatement ifStatement) {
 		this(
 				ifStatement.getId(), 
 				ifStatement.getVariable(), 

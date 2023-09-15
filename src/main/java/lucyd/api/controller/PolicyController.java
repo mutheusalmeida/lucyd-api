@@ -21,7 +21,7 @@ import lucyd.api.ifstatement.IfStatementPostRequestPayload;
 import lucyd.api.ifstatement.IfStatementPostResponsePayload;
 import lucyd.api.policy.Policy;
 import lucyd.api.policy.PolicyDecisionPostResponsePayload;
-import lucyd.api.policy.PolicyListGetResponsePayload;
+import lucyd.api.policy.PolicyGetResponsePayload;
 import lucyd.api.policy.PolicyRepository;
 
 @RestController
@@ -33,15 +33,15 @@ public class PolicyController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> register() {
+	public ResponseEntity<Void> register() {
 		policyRepository.save(new Policy());
 		
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<PolicyListGetResponsePayload>> getPolicies(@PageableDefault(size = 10) Pageable pagination) {
-		var<?> policies = policyRepository.findAll(pagination).map(PolicyListGetResponsePayload::new);
+	public ResponseEntity<Page<PolicyGetResponsePayload>> getPolicies(@PageableDefault(size = 10) Pageable pagination) {
+		var policies = policyRepository.findAll(pagination).map(PolicyGetResponsePayload::new);
 		
 		return ResponseEntity.ok(policies);
 	}
@@ -53,9 +53,7 @@ public class PolicyController {
 		var ifStatement = new IfStatement(req);
 		policy.addIfStatement(ifStatement);
 		
-		System.out.println(ifStatement.getId());
-		
-		var uri = uriBuilder.path("/policies/{id}/if_statements").buildAndExpand(id).toUri();
+		var uri = uriBuilder.path("/policies/{id}").buildAndExpand(id).toUri();
 		
 		return ResponseEntity.created(uri).body(new IfStatementPostResponsePayload(ifStatement));
 	}
@@ -70,9 +68,16 @@ public class PolicyController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		policyRepository.deleteById(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<PolicyGetResponsePayload> getPolicy(@PathVariable Long id) {
+		var policy = policyRepository.getReferenceById(id);
+		
+		return ResponseEntity.ok(new PolicyGetResponsePayload(policy));
 	}
 }

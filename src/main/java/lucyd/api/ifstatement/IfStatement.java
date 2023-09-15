@@ -58,7 +58,7 @@ public class IfStatement {
 	}
 
 
-	public void update(IfStatementGetRequestPayload req) {
+	public void update(IfStatementUpdateRequestPayload req) {
 		if (req.variable() != null) {
 			this.variable = req.variable();
 		}
