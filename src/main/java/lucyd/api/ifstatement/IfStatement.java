@@ -40,8 +40,6 @@ public class IfStatement {
 	@Column(name =  "then_block")
 	private Boolean thenBlock;
 	
-	private Boolean last;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Policy policy;
 	
@@ -52,7 +50,6 @@ public class IfStatement {
 		this.comparisonOperator = req.comparisonOperator();
 		this.elseBlock = req.elseBlock();
 		this.thenBlock = req.thenBlock();
-		this.last = true;
 	}
 
 
