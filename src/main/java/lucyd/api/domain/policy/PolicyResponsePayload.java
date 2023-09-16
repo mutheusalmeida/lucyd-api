@@ -1,15 +1,15 @@
-package lucyd.api.policy;
+package lucyd.api.domain.policy;
 
 import java.util.List;
 
-import lucyd.api.ifstatement.IfStatementResponsePayload;
+import lucyd.api.domain.ifstatement.IfStatementResponsePayload;
 
-public record PolicyGetResponsePayload(
+public record PolicyResponsePayload(
 			Long id,
 			List<IfStatementResponsePayload> ifStatements
 		) {
 	
-	public PolicyGetResponsePayload(Policy policy) {
+	public PolicyResponsePayload(Policy policy) {
 		this(policy.getId(), policy.getIfStatements().stream().map(IfStatementResponsePayload::new).toList());
 	}
 

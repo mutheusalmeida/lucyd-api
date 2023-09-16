@@ -1,4 +1,4 @@
-package lucyd.api.policy;
+package lucyd.api.domain.policy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lucyd.api.ifstatement.ComparisonOperator;
-import lucyd.api.ifstatement.IfStatement;
+import lucyd.api.domain.ifstatement.ComparisonOperator;
+import lucyd.api.domain.ifstatement.IfStatement;
 
 @Table(name = "policies")
 @Entity(name = "Policy")
@@ -43,9 +43,9 @@ public class Policy {
 		this.ifStatements.add(ifStatement);
 	}
 
-	public PolicyDecisionPostResponsePayload executeDecision(String req) {
+	public PolicyDecisionResponsePayload executeDecision(String req) {
 		JSONObject jsonObject = new JSONObject(req);
-		PolicyDecisionPostResponsePayload decision = null;
+		PolicyDecisionResponsePayload decision = null;
 		
 		for (IfStatement ifStatement : ifStatements) {
 			Long value = Long.parseLong(ifStatement.getValue());
@@ -76,13 +76,13 @@ public class Policy {
 			}
 			
 			if (expression) {
-				decision = new PolicyDecisionPostResponsePayload(thenBlock);
+				decision = new PolicyDecisionResponsePayload(thenBlock);
 				
 				if (!thenBlock) {
 					break;
 				}
 			} else {				
-				decision = new PolicyDecisionPostResponsePayload(elseBlock);
+				decision = new PolicyDecisionResponsePayload(elseBlock);
 				
 				if (!elseBlock) {
 					break;

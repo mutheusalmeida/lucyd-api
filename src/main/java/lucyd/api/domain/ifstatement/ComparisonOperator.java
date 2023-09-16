@@ -1,4 +1,4 @@
-package lucyd.api.ifstatement;
+package lucyd.api.domain.ifstatement;
 
 public enum ComparisonOperator {
 	EQ,

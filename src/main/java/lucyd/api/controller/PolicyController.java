@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import lucyd.api.ifstatement.IfStatement;
-import lucyd.api.ifstatement.IfStatementPostRequestPayload;
-import lucyd.api.ifstatement.IfStatementPostResponsePayload;
-import lucyd.api.policy.Policy;
-import lucyd.api.policy.PolicyDecisionPostResponsePayload;
-import lucyd.api.policy.PolicyGetResponsePayload;
-import lucyd.api.policy.PolicyRepository;
+import lucyd.api.domain.ifstatement.IfStatement;
+import lucyd.api.domain.ifstatement.IfStatementPostRequestPayload;
+import lucyd.api.domain.ifstatement.IfStatementPostResponsePayload;
+import lucyd.api.domain.policy.Policy;
+import lucyd.api.domain.policy.PolicyDecisionResponsePayload;
+import lucyd.api.domain.policy.PolicyResponsePayload;
+import lucyd.api.domain.policy.PolicyRepository;
 
 @RestController
 @RequestMapping("policies")
@@ -40,10 +40,17 @@ public class PolicyController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<PolicyGetResponsePayload>> getPolicies(@PageableDefault(size = 10) Pageable pagination) {
-		var policies = policyRepository.findAll(pagination).map(PolicyGetResponsePayload::new);
+	public ResponseEntity<Page<PolicyResponsePayload>> getPolicies(@PageableDefault(size = 10) Pageable pagination) {
+		var policies = policyRepository.findAll(pagination).map(PolicyResponsePayload::new);
 		
 		return ResponseEntity.ok(policies);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<PolicyResponsePayload> getPolicy(@PathVariable Long id) {
+		var policy = policyRepository.getReferenceById(id);
+		
+		return ResponseEntity.ok(new PolicyResponsePayload(policy));
 	}
 	
 	@PostMapping("/{id}/if_statements")
@@ -60,7 +67,7 @@ public class PolicyController {
 	
 	@PostMapping("/{id}/decision")
 	@Transactional
-	public ResponseEntity<PolicyDecisionPostResponsePayload> executeDecision(@PathVariable Long id, @RequestBody String req) {
+	public ResponseEntity<PolicyDecisionResponsePayload> executeDecision(@PathVariable Long id, @RequestBody String req) {
 		var policy = policyRepository.getReferenceById(id);
 		
 		return ResponseEntity.ok(policy.executeDecision(req));
@@ -72,12 +79,5 @@ public class PolicyController {
 		policyRepository.deleteById(id);
 		
 		return ResponseEntity.noContent().build();
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<PolicyGetResponsePayload> getPolicy(@PathVariable Long id) {
-		var policy = policyRepository.getReferenceById(id);
-		
-		return ResponseEntity.ok(new PolicyGetResponsePayload(policy));
 	}
 }

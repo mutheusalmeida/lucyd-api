@@ -1,4 +1,4 @@
-package lucyd.api.policy;
+package lucyd.api.domain.policy;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

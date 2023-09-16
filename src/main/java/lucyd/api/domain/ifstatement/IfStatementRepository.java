@@ -1,4 +1,4 @@
-package lucyd.api.ifstatement;
+package lucyd.api.domain.ifstatement;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

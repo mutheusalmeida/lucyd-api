@@ -1,4 +1,4 @@
-package lucyd.api.ifstatement;
+package lucyd.api.domain.ifstatement;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lucyd.api.policy.Policy;
+import lucyd.api.domain.policy.Policy;
 
 @Table(name = "if_statements")
 @Entity(name = "IfStatement")

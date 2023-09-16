@@ -1,17 +1,14 @@
-package lucyd.api.ifstatement;
+package lucyd.api.domain.ifstatement;
 
-public record IfStatementResponsePayload(
-		Long id,
+public record IfStatementPostResponsePayload(
 		String variable,
 		String value,
 		ComparisonOperator comparisonOperator,
 		Boolean elseBlock,
 		Boolean thenBlock
 		) {
-
-	public IfStatementResponsePayload(IfStatement ifStatement) {
+	public IfStatementPostResponsePayload(IfStatement ifStatement) {
 		this(
-				ifStatement.getId(), 
 				ifStatement.getVariable(), 
 				ifStatement.getValue(), 
 				ifStatement.getComparisonOperator(), 

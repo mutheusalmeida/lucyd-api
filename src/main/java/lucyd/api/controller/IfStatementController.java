@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lucyd.api.ifstatement.IfStatement;
-import lucyd.api.ifstatement.IfStatementUpdateRequestPayload;
-import lucyd.api.ifstatement.IfStatementRepository;
-import lucyd.api.ifstatement.IfStatementResponsePayload;
+import lucyd.api.domain.ifstatement.IfStatement;
+import lucyd.api.domain.ifstatement.IfStatementRepository;
+import lucyd.api.domain.ifstatement.IfStatementResponsePayload;
+import lucyd.api.domain.ifstatement.IfStatementUpdateRequestPayload;
 
 @RestController
 @RequestMapping("if_statements")
