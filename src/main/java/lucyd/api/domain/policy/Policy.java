@@ -3,8 +3,6 @@ package lucyd.api.domain.policy;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lucyd.api.domain.ifstatement.ComparisonOperator;
 import lucyd.api.domain.ifstatement.IfStatement;
 
 @Table(name = "policies")
@@ -42,61 +39,6 @@ public class Policy {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public DecisionResponsePayload executePolicy(String req) {
-		JSONObject jsonObject = new JSONObject(req);
-		DecisionResponsePayload decision = null;
-		
-		if (ifStatements.isEmpty()) {
-			throw new RuntimeException("Add at least one if-statement first");
-		}
-		
-		for (IfStatement ifStatement : ifStatements) {
-			Long value = Long.parseLong(ifStatement.getValue());
-			Long variable = jsonObject.getLong(ifStatement.getVariable());
-			
-			Boolean elseBlock = ifStatement.getElseBlock();
-			Boolean thenBlock = ifStatement.getThenBlock();
-			ComparisonOperator comparisonOperator = ifStatement.getComparisonOperator();
-			
-			Boolean expression = null;
-			
-			switch (comparisonOperator) {
-				case EQ:
-					expression = variable.equals(value);
-					break;
-				case LT:
-					expression = variable < value;
-					break;
-				case LTE:
-					expression = variable <= value;
-					break;
-				case GT:
-					expression = variable > value;
-					break;
-				case GTE:
-					expression = variable >= value;
-					break;
-			}
-			
-			if (expression) {
-				decision = new DecisionResponsePayload(thenBlock);
-				
-				if (!thenBlock) {
-					break;
-				}
-			} else {				
-				decision = new DecisionResponsePayload(elseBlock);
-				
-				if (!elseBlock) {
-					break;
-				}
-			}
-			
-		}
-
-		return decision;
 	}
 
 	public void update(PolicyRequestPayload req) {
