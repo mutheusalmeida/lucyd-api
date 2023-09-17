@@ -17,5 +17,4 @@ public record PolicyResponsePayload(
 				policy.getIfStatements().stream().map(IfStatementResponsePayload::new).toList()
 				);
 	}
-
 }
