@@ -30,22 +30,23 @@ public class Policy {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String name;
 
 	@OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
 	private List<IfStatement> ifStatements = new ArrayList<IfStatement>();
+	
+	public Policy(PolicyRequestPayload req) {
+		this.name = req.name();
+	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public void addIfStatement(IfStatement ifStatement) {
-		ifStatement.addPolicy(this);
-		this.ifStatements.add(ifStatement);
-	}
-
-	public PolicyDecisionResponsePayload executeDecision(String req) {
+	public DecisionResponsePayload executeDecision(String req) {
 		JSONObject jsonObject = new JSONObject(req);
-		PolicyDecisionResponsePayload decision = null;
+		DecisionResponsePayload decision = null;
 		
 		for (IfStatement ifStatement : ifStatements) {
 			Long value = Long.parseLong(ifStatement.getValue());
@@ -76,13 +77,13 @@ public class Policy {
 			}
 			
 			if (expression) {
-				decision = new PolicyDecisionResponsePayload(thenBlock);
+				decision = new DecisionResponsePayload(thenBlock);
 				
 				if (!thenBlock) {
 					break;
 				}
 			} else {				
-				decision = new PolicyDecisionResponsePayload(elseBlock);
+				decision = new DecisionResponsePayload(elseBlock);
 				
 				if (!elseBlock) {
 					break;
@@ -92,5 +93,9 @@ public class Policy {
 		}
 
 		return decision;
+	}
+
+	public void update(PolicyRequestPayload req) {
+		this.name = req.name();
 	}
 }

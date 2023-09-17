@@ -1,6 +1,6 @@
 package lucyd.api.domain.policy;
 
-public record PolicyDecisionResponsePayload(
+public record DecisionResponsePayload(
 			Boolean decision
 		) {
 

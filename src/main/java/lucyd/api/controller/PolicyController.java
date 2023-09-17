@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import lucyd.api.domain.ifstatement.IfStatement;
-import lucyd.api.domain.ifstatement.IfStatementPostRequestPayload;
-import lucyd.api.domain.ifstatement.IfStatementPostResponsePayload;
+import lucyd.api.domain.ifstatement.IfStatementRequestPayload;
+import lucyd.api.domain.ifstatement.IfStatementResponsePayload;
 import lucyd.api.domain.policy.Policy;
-import lucyd.api.domain.policy.PolicyDecisionResponsePayload;
+import lucyd.api.domain.policy.DecisionResponsePayload;
 import lucyd.api.domain.policy.PolicyResponsePayload;
+import lucyd.api.domain.policy.PolicyService;
 import lucyd.api.domain.policy.PolicyRepository;
+import lucyd.api.domain.policy.PolicyRequestPayload;
 
 @RestController
 @RequestMapping("policies")
@@ -31,12 +33,18 @@ public class PolicyController {
 	@Autowired
 	private PolicyRepository policyRepository;
 	
+	@Autowired
+	private PolicyService policyService;
+	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<Void> register() {
-		policyRepository.save(new Policy());
+	public ResponseEntity<PolicyResponsePayload> register(@RequestBody @Valid PolicyRequestPayload req, UriComponentsBuilder uriBuilder) {
+		var policy = new Policy(req);
+		policyRepository.save(policy);
 		
-		return ResponseEntity.noContent().build();
+		var uri = uriBuilder.path("/policies/{id}").buildAndExpand(policy.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(new PolicyResponsePayload(policy));
 	}
 	
 	@GetMapping
@@ -55,22 +63,30 @@ public class PolicyController {
 	
 	@PostMapping("/{id}/if_statements")
 	@Transactional
-	public ResponseEntity<IfStatementPostResponsePayload> addIfStatement(@PathVariable Long id, @RequestBody @Valid IfStatementPostRequestPayload req, UriComponentsBuilder uriBuilder) {
-		var policy = policyRepository.getReferenceById(id);
-		var ifStatement = new IfStatement(req);
-		policy.addIfStatement(ifStatement);
+	public ResponseEntity<IfStatementResponsePayload> addIfStatement(@PathVariable Long id, @RequestBody @Valid IfStatementRequestPayload req, UriComponentsBuilder uriBuilder) {
+		var ifStatement = policyService.addIfStatement(id, req);
 		
-		var uri = uriBuilder.path("/policies/{id}").buildAndExpand(id).toUri();
+		var uri = uriBuilder.path("/if_statements/{id}").buildAndExpand(ifStatement.id()).toUri();
 		
-		return ResponseEntity.created(uri).body(new IfStatementPostResponsePayload(ifStatement));
+		return ResponseEntity.created(uri).body(ifStatement);
 	}
 	
 	@PostMapping("/{id}/decision")
 	@Transactional
-	public ResponseEntity<PolicyDecisionResponsePayload> executeDecision(@PathVariable Long id, @RequestBody String req) {
+	public ResponseEntity<DecisionResponsePayload> executeDecision(@PathVariable Long id, @RequestBody String req) {
 		var policy = policyRepository.getReferenceById(id);
+		var decision = policy.executeDecision(req);
 		
-		return ResponseEntity.ok(policy.executeDecision(req));
+		return ResponseEntity.ok(decision);
+	}
+	
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<PolicyResponsePayload> update(@PathVariable Long id, @RequestBody PolicyRequestPayload req) {
+		var policy = policyRepository.getReferenceById(id);
+		policy.update(req);
+		
+		return ResponseEntity.ok(new PolicyResponsePayload(policy));
 	}
 	
 	@DeleteMapping("/{id}")

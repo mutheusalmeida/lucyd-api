@@ -3,7 +3,7 @@ package lucyd.api.domain.ifstatement;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record IfStatementPostRequestPayload(
+public record IfStatementRequestPayload(
 		
 		@Size(min = 1, message = "Variable cannot be blank")
 		@NotNull(message = "Variable is required")

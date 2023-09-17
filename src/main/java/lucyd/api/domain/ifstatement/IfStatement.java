@@ -44,19 +44,14 @@ public class IfStatement {
 	private Policy policy;
 	
 	
-	public IfStatement(IfStatementPostRequestPayload req) {
+	public IfStatement(IfStatementRequestPayload req, Policy policy) {
 		this.variable = req.variable();
 		this.value = req.value();
 		this.comparisonOperator = req.comparisonOperator();
 		this.elseBlock = req.elseBlock();
 		this.thenBlock = req.thenBlock();
-	}
-
-
-	public void addPolicy(Policy policy) {
 		this.policy = policy;
 	}
-
 
 	public void update(IfStatementUpdateRequestPayload req) {
 		if (req.variable() != null) {
