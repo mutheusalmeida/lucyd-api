@@ -44,9 +44,13 @@ public class Policy {
 		this.id = id;
 	}
 
-	public DecisionResponsePayload executeDecision(String req) {
+	public DecisionResponsePayload executePolicy(String req) {
 		JSONObject jsonObject = new JSONObject(req);
 		DecisionResponsePayload decision = null;
+		
+		if (ifStatements.isEmpty()) {
+			throw new RuntimeException("Add at least one if-statement first");
+		}
 		
 		for (IfStatement ifStatement : ifStatements) {
 			Long value = Long.parseLong(ifStatement.getValue());

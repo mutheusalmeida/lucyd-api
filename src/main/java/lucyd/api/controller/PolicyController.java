@@ -75,7 +75,7 @@ public class PolicyController {
 	@Transactional
 	public ResponseEntity<DecisionResponsePayload> executeDecision(@PathVariable Long id, @RequestBody String req) {
 		var policy = policyRepository.getReferenceById(id);
-		var decision = policy.executeDecision(req);
+		var decision = policy.executePolicy(req);
 		
 		return ResponseEntity.ok(decision);
 	}
