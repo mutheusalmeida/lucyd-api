@@ -16,11 +16,9 @@ public record IfStatementRequestPayload(
 		@NotNull(message = "Comparison operator is required")
 		ComparisonOperator comparisonOperator,
 		
-		@NotNull(message = "Else block is required")
-		Boolean elseBlock,
+		String elseBlock,
 		
-		@NotNull(message = "Then block is required")
-		Boolean thenBlock
+		String thenBlock
 		
 		) {
 

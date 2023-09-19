@@ -44,8 +44,13 @@ public class PolicyService {
 			Long value = Long.parseLong(ifStatement.getValue());
 			Long variable = jsonObject.getLong(ifStatement.getVariable());
 			
-			Boolean elseBlock = ifStatement.getElseBlock();
-			Boolean thenBlock = ifStatement.getThenBlock();
+			if (ifStatement.getElseBlock() == null || ifStatement.getThenBlock() == null) {
+				throw new RuntimeException("Add the end blocks");
+			}
+			
+			Boolean elseBlock = ifStatement.getElseBlock().equals("false") ? false : true;
+			Boolean thenBlock = ifStatement.getThenBlock().equals("false") ? false : true;
+			
 			ComparisonOperator comparisonOperator = ifStatement.getComparisonOperator();
 			
 			Boolean expression = null;

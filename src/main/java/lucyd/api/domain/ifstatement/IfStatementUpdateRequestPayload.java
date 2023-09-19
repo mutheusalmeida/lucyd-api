@@ -12,8 +12,8 @@ public record IfStatementUpdateRequestPayload(
 		
 		ComparisonOperator comparisonOperator,
 		
-		Boolean elseBlock,
-		Boolean thenBlock
+		String elseBlock,
+		String thenBlock
 		) {
 
 }

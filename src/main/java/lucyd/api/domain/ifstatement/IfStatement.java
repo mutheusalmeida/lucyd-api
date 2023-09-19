@@ -35,10 +35,10 @@ public class IfStatement {
 	private ComparisonOperator comparisonOperator;
 	
 	@Column(name =  "else_block")
-	private Boolean elseBlock;
+	private String elseBlock;
 	
 	@Column(name =  "then_block")
-	private Boolean thenBlock;
+	private String thenBlock;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Policy policy;

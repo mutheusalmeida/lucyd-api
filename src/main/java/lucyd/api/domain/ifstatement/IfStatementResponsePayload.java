@@ -5,8 +5,8 @@ public record IfStatementResponsePayload(
 		String variable,
 		String value,
 		ComparisonOperator comparisonOperator,
-		Boolean elseBlock,
-		Boolean thenBlock
+		String elseBlock,
+		String thenBlock
 		) {
 
 	public IfStatementResponsePayload(IfStatement ifStatement) {
